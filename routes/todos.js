@@ -34,17 +34,18 @@ route.get('/:id', async (req, res) => {
     if (typeof req.body.task !== 'string') {  
       return res.status(400).send({ error: 'Task name not provided' })  
     } 
-    if (req.body.done === 'true') {  
-      req.body.done = true  
+    if (req.body.status == 'complete') {  
+      req.body.status = true  
     } else {  
-      req.body.done = false  
+      req.body.status = false  
     }
   
     const newTodo = await Todos.create({  
 
         task: req.body.task,  
         desc:req.body.desc,
-        done: req.body.done,  
+        done: req.body.done, 
+        status:req.body.status, 
         due: req.body.due, 
         priority:req.body.priority 
     })

@@ -18,7 +18,7 @@ app.use('/',express.static(path.join(__dirname,'public')))
 app.use('/todos',todoroute)
 app.use('/notes',noteroute)
 
-db.sync({force:true})
+db.sync({})
   .then(() => {
     app.listen(6543)
   })

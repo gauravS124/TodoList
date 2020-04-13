@@ -6,10 +6,14 @@
             <title>Document</title>
             
             <link rel="stylesheet" href="styles.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>    
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+           
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"  crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <!-- <script src="script.js"></script>
+            <script src="add.js"></script> -->
+           
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
         </head>
         <body>
           <div class="container p-10">
@@ -21,24 +25,24 @@
             </div>
             <div class="form-group">
                 <label>Enter the Description</label>
-                <input type="text" class="form-control" id="task" placeholder="Eg : write essay,clean your room">
+                <input type="text" class="form-control" id="desc" placeholder="Eg : write essay,clean your room">
             </div>
             <div class="form-group">
                 <label>Enter the Due Date</label>
-                <input type="date" class="form-control" id="task" placeholder="Eg : write essay,clean your room">
+                <input type="date" class="form-control" id="due" placeholder="Eg : write essay,clean your room">
             </div>
             <fieldset class="form-group">
                 <div class="row">
                 <legend class="col-form-label col-sm-2 pt-0">Status</legend>
                 <div class="col-sm-10">
                     <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="incomplete" checked>
+                    <input class="form-check-input" type="radio" name="status" id="gridRadios1" value="incomplete" checked>
                     <label class="form-check-label" for="gridRadios1">
                         Incomplete
                     </label>
                     </div>
                     <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="complete">
+                    <input class="form-check-input" type="radio" name="status" id="gridRadios2" value="complete">
                     <label class="form-check-label" for="gridRadios2">
                         Complete
                     </label>
@@ -53,19 +57,19 @@
                 <legend class="col-form-label col-sm-2 pt-0">Priority</legend>
                 <div class="col-sm-10">
                     <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadiosP" id="gridRadios1" value="incomplete" checked>
+                    <input class="form-check-input" type="radio" name="gridRadios1" id="gridRadios1" value="low" checked>
                     <label class="form-check-label" for="gridRadios1">
                         Low
                     </label>
                     </div>
                     <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadiosP" id="gridRadios2" value="complete">
+                    <input class="form-check-input" type="radio" name="gridRadios1" id="gridRadios2" value="medium">
                     <label class="form-check-label" for="gridRadios2">
                         Medium
                     </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadiosP" id="gridRadios2" value="complete">
+                        <input class="form-check-input" type="radio" name="gridRadios1" id="gridRadios2" value="high">
                         <label class="form-check-label" for="gridRadios2">
                         High
                         </label>
@@ -77,33 +81,56 @@
 
 
         
-            <button type="submit" class="btn btn-primary" onclick="add()">Add</button>
-            <button type="submit" class="btn btn-danger" onclick="remove()">Clear</button>
+            <button type="submit" class="btn btn-primary" id="addTask"  onclick="add()" >Add</button>
+       
             <br>
             <br>
             <div id="tasklist">
                 <div class="col-sm-10 card m-0 p-0" >
-                <div class="card-header m-0 row bg-danger text-white" >
-                    <div class="col">Task name</div>
-                    <div class="col text-right">Due date (dd-mm-yyyy)</div>
-                </div>
-                <div class="card-body row">
-                    <div class="col">Task Description</div>
-                    <button class="btn btn-danger col col-sm-2">High</button>
-                </div>
-                </div>
-                <!-- <div class="form-group">
-                    <label>Enter the Description</label>
-                    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
+                    <div class="card-header m-0 row bg-danger text-white" >
+                        <div class="col">Task name</div>
+                        <div class="col text-right">Due date (dd-mm-yyyy)</div>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row">
+                            <div class="col">Task Description</div>
+                            <button class="btn btn-danger col col-sm-2">High</button>
+                           
+                        </div>
+                        <br>
+                        <button type="button" class="btn collapsible btn-primary" display="block" >Notes</button>
 
-                </div>
-                
+                        <div class="row">
+                            <div class="content">
+                               <ul><li>notes 1</li></ul>
+                               <input type="text" class="col-sm-10" display="inline        " name="" id="">
+                               <button class="btn btn-primary">Add</button> 
+                            </div>
+                        </div>
 
-                <div id="demo" class="collapse">
-                Lorem ipsum dolor text....
-                </div> -->
+
+                    </div>
+                   
+                </div>
+               
 
             </div>
           </div>
+          <script>
+            var coll = document.getElementsByClassName("collapsible");
+            var i;
+            
+            for (i = 0; i < coll.length; i++) {
+              coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                  content.style.display = "none";
+                } else {
+                  content.style.display = "block";
+                }
+              });
+            }
+            </script>   
         </body>
         </html>
