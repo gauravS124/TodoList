@@ -17,3 +17,14 @@
 //             )
 //     })
 // })
+
+
+
+// $(function(){
+
+//     let t=document.getElementById("notebutton")
+//     let content = t.nextElementSibling;
+//     content.style.display = "none";
+   
+    
+//  })

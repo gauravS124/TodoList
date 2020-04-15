@@ -53,6 +53,62 @@ route.get('/:id', async (req, res) => {
 
 })
 
+route.patch( "/:id", async (req, res) =>{
+
+  if (isNaN(Number(req.params.id))) {  
+    return res.status(400).send({  
+      error: 'task id must be an integer',  
+    })  
+  }  
+  if (req.body.status == 'complete') {  
+    req.body.status = true  
+  } else {  
+    req.body.status = false  
+  } 
+
+  const todo = await Todos.findByPk(req.params.id) 
+ 
+  
+  const updated=await todo.update(
+    {
+         due:req.body.due,
+         priority:req.body.priority,
+         status:req.body.status,
+    })
+  console.log(updated)
+    if(updated)
+      res.status(201).send({ success: ' task updated', data: updated })
+      else
+      res.status(400).send({ error: 'task id must be an integer'  }) 
+
+  // if(todo)
+  // {
+  //   todo.due=req.body.due
+  //   todo.priority=req.body.priority
+  //   todo.status=req.body.status
+  //   await todo.save()
+    
+  //   res.status(201).send({ success: ' task updated', data: todo })
+  // }
+ 
+
+})
+
+  // const updatedTask=await task.update({
+  //   due=req.body.due,
+  //    priority=req.body.priority,
+  //    status=req.body.status
+  //   }) 
+
+  //     if(updatedTask)
+  //     res.status(201).send({ success: ' task updated', data: updatedTask })
+  //     else
+  //     res.status(400).send({ error: 'task id must be an integer'  })  
+
+
+
+
+
 route.get('/:id/notes', async (req, res) => {
     if (isNaN(Number(req.params.id))) {  
       return res.status(400).send({  

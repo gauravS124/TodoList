@@ -1,26 +1,32 @@
 div{
+margin-left: 20px;
+}
+h3{
     margin-left: 20px;
-    }
-    h3{
-        margin-left: 20px;
-    }
-    .btn{
-        margin-left: 20px;
-    }
-    #task{
-        max-width: 70%;
-    }
-    label{
-        display:block;
-    }
-    body>div>label{
-        display: block;
-    }
-    .listbutton{
-        display:block;
-        padding-left: 50px;
-        padding-right: 50px;
-    }
-    .marked{
-        text-decoration: line-through;
-    }
+}
+.btn{
+    margin-left: 20px;
+}
+#task{
+    max-width: 70%;
+}
+label{
+    display:block;
+}
+body>div>label{
+    display: block;
+}
+.listbutton{
+    display:block;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.marked{
+    text-decoration: line-through;
+}
+#notebutton{
+    width: 80%;
+}
+.modal-content {
+    color: #000;
+}
