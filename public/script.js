@@ -28,7 +28,7 @@ function createTaskCardI(Task){
                                         <div class="modal-body">
                                         <div class="form-group">
                                                         <label>Enter the Due Date</label>
-                                                        <input type="date" class="form-control" id="dueinmodal${Task.id}" value='${Task.due}' placeholder="Eg : write essay,clean your room">
+                                                        <input type="date" class="form-control" id="dueinmodal${Task.id}" value='${Task.due.slice(0,10)}'>
                                             </div>
                                                     <fieldset class="form-group">
                                                         <div class="row">
@@ -91,7 +91,7 @@ function createTaskCardI(Task){
                     <div class="card-body ">
                         <div class="row">
                             <div class="col">${Task.desc}</div>
-                            <button class="btn btn-danger col col-sm-2">${Task.priority}</button>
+                            <button class="btn btn-danger col col-sm-2 priority">${Task.priority}</button>
                            
                         </div>
                         <br>
@@ -129,7 +129,7 @@ function createTaskCardC(Task){
                                         <div class="modal-body">
                                         <div class="form-group">
                                                         <label>Enter the Due Date</label>
-                                                        <input type="date" class="form-control" id="dueinmodal${Task.id}" value='${Task.due}' placeholder="Eg : write essay,clean your room">
+                                                        <input type="date" class="form-control" id="dueinmodal${Task.id}" value='${Task.due.slice(0,10)}'>
                                             </div>
                                                     <fieldset class="form-group">
                                                         <div class="row">
@@ -190,7 +190,7 @@ function createTaskCardC(Task){
                     <div class="card-body ">
                         <div class="row">
                             <div class="col">${Task.desc}</div>
-                            <button class="btn btn-danger col col-sm-2">${Task.priority}</button>
+                            <button class="btn btn-danger col col-sm-2 priority">${Task.priority}</button>
                            
                         </div>
                         <br>
@@ -207,6 +207,7 @@ function createTaskCardC(Task){
 }
 
 function addTask(task,desc,due,status,priority,done){
+
     $.post('todos',{
         task:task,
         desc:desc,
@@ -214,7 +215,7 @@ function addTask(task,desc,due,status,priority,done){
         status:status,
         priority:priority
         },function (data){
-            done(data)
+            done(data)  
         })
 
 }
@@ -244,11 +245,12 @@ function add(){
 }
 
 function refreshList(){
+    console.log("refreshing list")
     let tasklist=$('#tasklist')    
 
     getTask(function(tasks){
         tasklist.empty()
-        console.log("task   ------",tasks)
+       // console.log("task   ------",tasks)
 
         for(task of tasks){
            
@@ -264,16 +266,7 @@ function refreshList(){
 
         }
         //--------------changng color of priority ------------------------
-        let pbtn=document.getElementsByClassName("btn btn-danger col col-sm-2")       
-
-        for(p of pbtn)
-        {
-        if(p.innerText=="low")
-        {p.className="btn btn-success col col-sm-2"}
-        if(p.innerText=="moderate")
-        {p.className="btn btn-primary col col-sm-2"}
-        
-         }
+       priorityColor()
 //------------------slicing due date--------------------------
         let dates=document.getElementsByClassName("due")
         for(p of dates)
@@ -284,7 +277,7 @@ function refreshList(){
         //--------------------hiding notes-----------------
         let t=document.getElementsByClassName("btn collapsible btn-primary")
         for(btn of t){
-            console.log(btn)
+           // console.log(btn)
             let content = btn.nextElementSibling     
             content.style.display = "none"
         }
@@ -309,62 +302,27 @@ function editClicked(id){
             priority,
             function(editedTask){
                            refreshList()
-                           var form = document.getElementById("myForm");
-                            form.reset();
-                         window.alert("edited task in database")
+                           window.alert("edited task in database")
                         })
 }
-function editTask(id,taskdue,status,priority,done){
+async function editTask(id,taskdue,status,priority,done){
     let editroute='todos/'+id
-    $.patch(editroute,{
-        due:taskdue,
-        status:status,
-        priority:priority
-    },function(data){
-        done(data)
+   
+    const resp = await fetch(editroute, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({  due:taskdue, status:status, priority:priority })
+    }).catch((err) => {
+        console.error('err', err);
     })
-}
-
-// function addTask(task,desc,due,status,priority,done){
-//     $.post('todos',{
-//         task:task,
-//         desc:desc,
-//         due:due,
-//         status:status,
-//         priority:priority
-//         },function (data){
-//             done(data)
-//         })
-
-// }
-
-
-// function add(){
-//     let taskname=document.getElementById("task").value
-//     let taskdesc=document.getElementById("desc").value
-//     let taskdue=document.getElementById("due").value
-//     let status=$("input[type='radio'][name='status']:checked").val()
-//     let priority=$("input[type='radio'][name='gridRadios1']:checked").val();
-    
-
-//     addTask(
-//         taskname,
-//         taskdesc,
-//         taskdue,
-//         status,
-//         priority,
-//         function(addedTask){
-//            refreshList()
-//            var form = document.getElementById("myForm");
-//             form.reset();
-//          window.alert("Added task to database")
-//         }
-//         )
-// }
+    done(resp);
+}   
 
 // ----------------functins for notes button-------------------
 function noteClicked(id){
-   // console.log("clicked")
     let t=document.getElementById("notebutton"+id)
     t.classList.toggle("active");
     let content = t.nextElementSibling;
@@ -373,7 +331,6 @@ function noteClicked(id){
     } else {
       content.style.display = "block";
     }
-   // console.log(id)
     d(id)
 
 }
@@ -394,9 +351,7 @@ function d(id){
         var child = e.lastElementChild;          
             e.empty(); 
         
-        // console.log("inside d" ,e)
         for(note of notes){
-            // console.log(note)
             let n=document.createElement("li")
             n.appendChild(document.createTextNode(note.note));
             e.append(n)
@@ -418,7 +373,7 @@ function notepost(id,note,done){
 
 function addnote(id){
     let note=document.getElementById("noteinput"+id)
-    console.log(note.value,"is note to be added",id)
+   // console.log(note.value,"is note to be added",id)
     notepost(
         id,
         note.value, function(addedTask){
@@ -431,21 +386,17 @@ function addnote(id){
 function ReverseString(str) { 
     return str.split('').reverse().join('') 
  }
-function sortbydate(){
+function sortbystatus(){
+    console.log("sorting list by status")
+
     let tasklist=$('#tasklist')    
 
     getTask(function(tasks){
         tasklist.empty()
-       // console.log("task   ------",tasks)
-       tasks= tasks.sort(function (a, b) {
-             a.due=a.due.slice(0,10)
-            b.due=b.due.slice(0,10)
-            // a.due=ReverseString(a.due)
-            // b.due=ReverseString(b.due)
-           // console.log( )
+        tasks= tasks.sort(function (a, b) {
+            
             return a.status - b.status;
           })
-         // console.log(tasks)
 
         for(task of tasks){
            
@@ -461,16 +412,7 @@ function sortbydate(){
 
         }
         //--------------changng color of priority ------------------------
-        let pbtn=document.getElementsByClassName("btn btn-danger col col-sm-2")       
-
-        for(p of pbtn)
-        {
-        if(p.innerText=="low")
-        {p.className="btn btn-success col col-sm-2"}
-        if(p.innerText=="moderate")
-        {p.className="btn btn-primary col col-sm-2"}
-        
-         }
+       priorityColor()
 //------------------slicing due date--------------------------
         let dates=document.getElementsByClassName("due")
         for(p of dates)
@@ -492,12 +434,149 @@ function sortbydate(){
     
 }
 
+function sortbydue(){
+    console.log("sorting list by date")
+
+    let tasklist=$('#tasklist')    
+
+   
+
+    getTask(function(tasks){
+
+        tasklist.empty()
+        for(task of tasks){
+            task.due=task.due.slice(0,10)
+        }
+        tasks= tasks.sort(function (a, b) {
+            return a.due>b.due? 1 : -1;
+          })
+
+        for(task of tasks){
+           
+            if(task.status==false){
+            let card=createTaskCardI(task)
+            tasklist.append(card)
+            }
+            else{
+            let card=createTaskCardC(task)
+            tasklist.append(card)
+            }
+       
+
+        }
+        //--------------changng color of priority ------------------------
+       priorityColor()
+//------------------slicing due date--------------------------
+        let dates=document.getElementsByClassName("due")
+        for(p of dates)
+        {
+            p.innerText=p.innerText.slice(0,10)
+        
+        }
+        //--------------------hiding notes-----------------
+        let t=document.getElementsByClassName("btn collapsible btn-primary")
+        for(btn of t){
+           // console.log(btn)
+            let content = btn.nextElementSibling     
+            content.style.display = "none"
+        }
+
+    })
+
+
+    
+}
+
+function sortbypriority(){
+    console.log("sorting list by priority")
+
+    let tasklist=$('#tasklist')  
+
+    getTask(function(tasks){
+
+        tasklist.empty()
+        for(task of tasks){
+            if(task.priority=="high")
+           { task.priority="3"}
+           if(task.priority=="medium")
+           { task.priority="2"}
+           if(task.priority=="low")
+           { task.priority="1"}
+        }
+        tasks= tasks.sort(function (a, b) {
+          
+            return a.priority-b.priority;
+          })
+          tasks.reverse()
+
+          for(task of tasks){
+            if(task.priority=="3")
+           { task.priority="high"}
+           if(task.priority=="2")
+           { task.priority="medium"}
+           if(task.priority=="1")
+           { task.priority="low"}
+        }
+
+        for(task of tasks){
+           
+            console.log(task.due)
+            if(task.status==false){
+            let card=createTaskCardI(task)
+            tasklist.append(card)
+            }
+            else{
+            let card=createTaskCardC(task)
+            tasklist.append(card)
+            }
+       
+
+        }
+        //--------------changng color of priority ------------------------
+       priorityColor()
+//------------------slicing due date--------------------------
+        let dates=document.getElementsByClassName("due")
+        for(p of dates)
+        {
+            p.innerText=p.innerText.slice(0,10)
+        
+        }
+        //--------------------hiding notes-----------------
+        let t=document.getElementsByClassName("btn collapsible btn-primary")
+        for(btn of t){
+           // console.log(btn)
+            let content = btn.nextElementSibling     
+            content.style.display = "none"
+        }
+
+    })
+
+
+    
+}
+
+function priorityColor(){
+
+    let pbtn=document.getElementsByClassName("priority")           
+  //  console.log(pbtn[0])
+    for(p of pbtn)
+    {    
+    if(p.innerText=="low")
+    {p.className="btn btn-success col col-sm-2 priority"}
+    if(p.innerText=="medium")
+    {p.className="btn btn-primary col col-sm-2 priority"}
+    
+     }
+}
+
 
 $(function(){
     
    
     // console.log("t===============",t[0])
-     sortbydate()
+   // sortbypriority()
+   // sortbydue()
+    refreshList()
     //function(){
     //     var i;
     //     for (i = 0; i < t.length; i++) { 
